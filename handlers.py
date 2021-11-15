@@ -3,8 +3,6 @@ from telegram import ParseMode
 from telegram.ext import CommandHandler, MessageHandler, Filters
 from telegram.utils.helpers import escape_markdown
 
-from signal import signal, SIGINT, SIGBREAK
-
 import yaml
 from yaml.error import YAMLError
 
