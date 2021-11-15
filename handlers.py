@@ -3,6 +3,11 @@ from telegram import ParseMode
 from telegram.ext import CommandHandler, MessageHandler, Filters
 from telegram.utils.helpers import escape_markdown
 
+from signal import signal, SIGINT, SIGBREAK
+
+import yaml
+from yaml.error import YAMLError
+
 from settings import WELCOME_MESSAGE, TELEGRAM_SUPPORT_CHAT_ID, REPLY_TO_THIS_MESSAGE, WRONG_REPLY
 
 from rivescript import RiveScript
@@ -39,21 +44,51 @@ def forward_to_chat(update, context):
             reply_to_message_id=forwarded.message_id,
             text=f'{update.message.from_user.id}\n{REPLY_TO_THIS_MESSAGE}'
         )
-    
-    # Setup automatic response
-    if update.message.text:
-        reply =rs.reply(str(update.message.from_user.id), update.message.text)
+
+    # Load variables
+    vars = rs.get_uservars(update.message.from_user.id)
+    if vars is None:
         try:
-            context.bot.send_message(
-                chat_id=update.message.chat.id,
-                parse_mode=ParseMode.HTML,
-                text=reply
-            )
+            with open('data/uservars/' + str(update.message.from_user.id) + '.yml', 'r') as f :
+                vars = yaml.safe_load(f)
+                rs.set_uservars(update.message.from_user.id, vars)
+                f.close()
+        except EnvironmentError:
+            a = 1
+        except YAMLError as e:
             context.bot.send_message(
                 chat_id=TELEGRAM_SUPPORT_CHAT_ID,
-                parse_mode=ParseMode.HTML,
-                text=f'🔮: {reply}'
+                text="YAML Error: " + str(e)
             )
+    else:
+        try:
+            print('Saving data...')
+            with open('data/uservars/' + str(update.message.from_user.id) + '.yml', 'w') as f :
+                f.write(yaml.safe_dump(vars))
+                f.close()
+        except EnvironmentError:
+            a = 1
+
+    # Setup automatic response
+    if update.message.text:
+        reply = rs.reply(str(update.message.from_user.id), update.message.text)
+        try:
+            if len(reply) > 0 and reply != '[ERR: No Reply Matched]':
+                context.bot.send_message(
+                    chat_id=update.message.chat.id,
+                    parse_mode=ParseMode.HTML,
+                    text=reply
+                )
+                context.bot.send_message(
+                    chat_id=TELEGRAM_SUPPORT_CHAT_ID,
+                    parse_mode=ParseMode.HTML,
+                    text=f'🔮: {reply}'
+                )
+            else:
+                context.bot.send_message(
+                    chat_id=TELEGRAM_SUPPORT_CHAT_ID,
+                    text="can you answer that one?"
+                )
         except Exception as e:
             context.bot.send_message(
                 chat_id=update.message.chat.id,
@@ -101,9 +136,16 @@ def forward_to_user(update, context):
             text=WRONG_REPLY
         )
 
-
 def setup_dispatcher(dp):
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(MessageHandler(Filters.chat_type.private, forward_to_chat))
     dp.add_handler(MessageHandler(Filters.chat(TELEGRAM_SUPPORT_CHAT_ID) & Filters.reply, forward_to_user))
     return dp
+
+def save_all_data():
+    print('Saving user data...')
+    data = rs._session.get_all()
+    for user in data:
+        with open('data/uservars/' + str(user) + '.yml', 'w') as f:
+            f.write(yaml.safe_dump(data[user]))
+            f.close()
