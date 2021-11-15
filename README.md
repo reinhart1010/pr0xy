@@ -14,4 +14,6 @@ it's complicated, but if you want a really quick answer, **true**!
 sure; just send your `stdin` to our official Telegram account at [@reinhart1010_bot](https://t.me/reinhart1010_bot); && **true**, currently it's the only way for anyone to chat with reinhart;
 
 ## credits && license
+the source code behind this program is based on https://github.com/ohld/telegram-support-bot, && of course, with some additions!
+
 root heads, root rocks, && finally, root roots! 🌱

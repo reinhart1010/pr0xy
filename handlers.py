@@ -1,5 +1,7 @@
 import os
+from telegram import ParseMode
 from telegram.ext import CommandHandler, MessageHandler, Filters
+from telegram.utils.helpers import escape_markdown
 
 from settings import WELCOME_MESSAGE, TELEGRAM_SUPPORT_CHAT_ID, REPLY_TO_THIS_MESSAGE, WRONG_REPLY
 
@@ -40,15 +42,27 @@ def forward_to_chat(update, context):
     
     # Setup automatic response
     if update.message.text:
-        reply = rs.reply(str(update.message.from_user.id), update.message.text)
-        context.bot.send_message(
-            chat_id=update.message.chat.id,
-            text=reply
-        )
-        context.bot.send_message(
-            chat_id=TELEGRAM_SUPPORT_CHAT_ID,
-            text=f'🔮: {reply}'
-        )
+        reply =rs.reply(str(update.message.from_user.id), update.message.text)
+        try:
+            context.bot.send_message(
+                chat_id=update.message.chat.id,
+                parse_mode=ParseMode.HTML,
+                text=reply
+            )
+            context.bot.send_message(
+                chat_id=TELEGRAM_SUPPORT_CHAT_ID,
+                parse_mode=ParseMode.HTML,
+                text=f'🔮: {reply}'
+            )
+        except Exception as e:
+            context.bot.send_message(
+                chat_id=update.message.chat.id,
+                text="oops, there's an error on my side; " + str(e)
+            )
+            context.bot.send_message(
+                chat_id=TELEGRAM_SUPPORT_CHAT_ID,
+                text="🔮: oops, there's an error on my side; " + str(e)
+            )
 
 def forward_to_user(update, context):
     """{
