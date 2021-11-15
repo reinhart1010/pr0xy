@@ -3,6 +3,11 @@ from telegram.ext import CommandHandler, MessageHandler, Filters
 
 from settings import WELCOME_MESSAGE, TELEGRAM_SUPPORT_CHAT_ID, REPLY_TO_THIS_MESSAGE, WRONG_REPLY
 
+from rivescript import RiveScript
+
+rs = RiveScript()
+rs.load_directory("./kb")
+rs.sort_replies()
 
 def start(update, context):
     update.message.reply_text(WELCOME_MESSAGE)
@@ -32,7 +37,18 @@ def forward_to_chat(update, context):
             reply_to_message_id=forwarded.message_id,
             text=f'{update.message.from_user.id}\n{REPLY_TO_THIS_MESSAGE}'
         )
-
+    
+    # Setup automatic response
+    if update.message.text:
+        reply = rs.reply(str(update.message.from_user.id), update.message.text)
+        context.bot.send_message(
+            chat_id=update.message.chat.id,
+            text=reply
+        )
+        context.bot.send_message(
+            chat_id=TELEGRAM_SUPPORT_CHAT_ID,
+            text=f'🔮: {reply}'
+        )
 
 def forward_to_user(update, context):
     """{

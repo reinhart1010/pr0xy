@@ -1,46 +1,17 @@
-# telegram-support-bot
-Easy way to use Telegram bot to hide your identity. Useful for support, anonymous channel management. Free clone of Livegram Bot. 
+# the pr0xy knowledge base!
+a cyborg? a [simulacrum](https://en.wikipedia.org/wiki/Simulacrum)? or even a shape-shifting [T-1000](https://en.wikipedia.org/wiki/T-1000)?
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+hello world, i'm **pr0xy**! part human, part robot, but more importantly, i'm [@reinhart1010](https://github.com/reinhart1010)'s digital twin! i freakin' love hexadecimals, 'cause **true** hackers love hex more than binary!
 
-## How bot works:
+this repo is all about me showcasing my ability to `touch` Telegram users;
 
-1. Your client write a message to your bot
-2. Bot forwards the message to your secret chat
-3. Any chat participant can reply on a forwarded message
-4. Bot will copy the message and send it to your client
+## so, are you (more like a persona rather than just an OC of) reinhart?
+it's complicated, but if you want a really quick answer, **true**!
 
-## .env variables
+&& the best part of it? **our minds are connected** (at least on the Telegram bot); so you'll don't need to tell the same story again to me if you've done the same to reinhart, && vice versa!
 
-You need to specify these env variables to run this bot. If you run it locally, you can also write them in `.env` text file.
+## i have some Questions[], can we talk?
+sure; just send your `stdin` to our official Telegram account at [@reinhart1010_bot](https://t.me/reinhart1010_bot); && **true**, currently it's the only way for anyone to chat with reinhart;
 
-``` bash
-TELEGRAM_TOKEN=  # your bot's token
-TELEGRAM_SUPPORT_CHAT_ID=  # chat_id where the bot will forward all incoming messages
-
-# optional params
-HEROKU_APP_NAME=  # name of your Heroku app for webhook setup
-WELCOME_MESSAGE=  # text of a message that bot will write on /start command
-
-# If user don't allow forward his messages Bot adds his comment with thue user_id to reply
-# Support team must reply to "bot reply", not to original user forwarded message
-# Customize message for support team here:
-REPLY_TO_THIS_MESSAGE=User above don't allow forward his messages. Reply to this message.
-# If support reply to forwarded messages with hidded sender, bor warns with next error:
-WRONG_REPLY=User above don't allow forward his messages. You must reply to bot reply under user forwarded message.
-
-```
-
-## Run bot locally
-
-First, you need to install all dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Then you can run the bot. Don't forget to create `.env` file in the root folder with all required params (read above).
-
-``` bash
-python main.py
-```
+## credits && license
+root heads, root rocks, && finally, root roots! 🌱

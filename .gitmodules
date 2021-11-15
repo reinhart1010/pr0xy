@@ -1,0 +1,3 @@
+[submodule "kb/general"]
+	path = kb/general
+	url = https://github.com/reinhart1010/pr0xy-scripts
